@@ -1,6 +1,4 @@
 import numpy as np
-from sklearn.linear_model import RidgeClassifier
-from sklearn import metrics
 
 from tqdm import tqdm
 import pandas as pd
