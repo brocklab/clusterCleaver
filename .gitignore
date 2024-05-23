@@ -1,3 +1,4 @@
 /src/scDistRank/__pycache__/*
 .pypirc
 dist/*
+*.h5ad
