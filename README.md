@@ -1,1 +1,1 @@
-# scDistRank
+# clusterCleaver
