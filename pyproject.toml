@@ -29,3 +29,6 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/brocklab/clusterCleaver"
 Issues =   "https://github.com/brocklab/clusterCleaver/issues"
+
+[tool.ruff.format]
+quote-style = "single"

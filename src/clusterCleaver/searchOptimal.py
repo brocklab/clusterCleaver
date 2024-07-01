@@ -11,9 +11,9 @@ from scipy.stats import wasserstein_distance, gaussian_kde
 def searchExpressionDist1D(
     adata,
     surfaceGenes,
-    modifier="remove0",
-    metric="EMD",
-    label="leiden",
+    modifier='remove0',
+    metric='EMD',
+    label='leiden',
     minCounts=100,
     scale=False,
     maxCombos=10000,
@@ -32,11 +32,11 @@ def searchExpressionDist1D(
     Outputs:
         - dfScores: Modified surface genes dataframe with a new separation score
     """
-    metricDict = {"EMD": wasserstein_distance, "bhat": bhattacharyyaHist}
+    metricDict = {'EMD': wasserstein_distance, 'bhat': bhattacharyyaHist}
 
     # Validate input data
     nGenes = 1
-    assert modifier in ["remove0", "no0", None], 'Modifier must be "remove0" or None'
+    assert modifier in ['remove0', 'no0', None], 'Modifier must be "remove0" or None'
     if issparse(adata.X):
         adata.X = adata.X.toarray()
     scGenes = np.array(adata.var.index)
@@ -44,24 +44,24 @@ def searchExpressionDist1D(
     availableGenes = [gene for gene in surfaceGenes if gene in scGenes]
     assert (
         len(availableGenes) > 0
-    ), "No surface genes match genes in adata.var.index, check both inputs"
+    ), 'No surface genes match genes in adata.var.index, check both inputs'
 
     surfaceCombos = list(itertools.combinations(availableGenes, nGenes))
 
     if len(surfaceCombos) > maxCombos:
         warnings.warn(
-            "The number of combos generated is beyond the set maximum number of combos. Was this intentional?"
+            'The number of combos generated is beyond the set maximum number of combos. Was this intentional?'
         )
-    print(f"Searching for {len(surfaceCombos)} combinations of {nGenes} gene(s)")
+    print(f'Searching for {len(surfaceCombos)} combinations of {nGenes} gene(s)')
 
     comboScores = []
     expressedClusters = []
-    adata.obs[label] = adata.obs[label].astype("string")
+    adata.obs[label] = adata.obs[label].astype('string')
 
     clusterLabels = list(adata.obs[label].unique())
     assert (
         len(clusterLabels) == 2
-    ), "Number of unique labels in adata.obs[label] must be 2"
+    ), 'Number of unique labels in adata.obs[label] must be 2'
 
     is0 = np.array(adata.obs[label] == clusterLabels[0]).astype(bool)
     is1 = np.array(adata.obs[label] == clusterLabels[1]).astype(bool)
@@ -87,9 +87,9 @@ def searchExpressionDist1D(
             X0 = X0.ravel()
             X1 = X1.ravel()
             if np.mean(X0) > np.mean(X1):
-                cluster = "0"
+                cluster = '0'
             else:
-                cluster = "1"
+                cluster = '1'
         else:
             cluster = -1
 
@@ -104,17 +104,17 @@ def searchExpressionDist1D(
 
     dfScores = pd.DataFrame(
         {
-            "genes": np.array(surfaceCombosWrite).ravel(),
-            "scores": comboScores,
-            "cluster": expressedClusters,
+            'genes': np.array(surfaceCombosWrite).ravel(),
+            'scores': comboScores,
+            'cluster': expressedClusters,
         }
     )
 
-    dfScores["genes"] = dfScores["genes"].astype("string")
-    return dfScores.sort_values(by="scores", ascending=False)
+    dfScores['genes'] = dfScores['genes'].astype('string')
+    return dfScores.sort_values(by='scores', ascending=False)
 
 
-def modifyEMD(X0, X1, modifier="remove0", minCounts=100):
+def modifyEMD(X0, X1, modifier='remove0', minCounts=100):
     """
     Selectively removes gene expression with counts of 0s for the higher expressing cluster.
 
@@ -130,11 +130,11 @@ def modifyEMD(X0, X1, modifier="remove0", minCounts=100):
     X0 = X0.copy()
     X1 = X1.copy()
 
-    if modifier not in ["remove0", "no0"]:
+    if modifier not in ['remove0', 'no0']:
         return X0, X1
     # Other checks
 
-    if modifier == "remove0":
+    if modifier == 'remove0':
         if X1.mean() > X0.mean():
             X1New = X1[X1 > 0]
             X0New = X0
@@ -147,7 +147,7 @@ def modifyEMD(X0, X1, modifier="remove0", minCounts=100):
             return X0, X1
         else:
             return X0New, X1New
-    elif modifier == "no0":
+    elif modifier == 'no0':
         X1New = X1[X1 > 0]
         X0New = X0[X0 > 0]
 
@@ -214,8 +214,8 @@ def bhattacharyyaHist(p, q):
     minFull = np.min(full)
     # Calculate and normalize counts
     histRange = (minFull, maxFull)
-    hist1, _ = np.histogram(p, bins="auto", range=histRange)
-    hist2, _ = np.histogram(q, bins="auto", range=histRange)
+    hist1, _ = np.histogram(p, bins='auto', range=histRange)
+    hist2, _ = np.histogram(q, bins='auto', range=histRange)
     hist1 = hist1 / sum(hist1)
     hist2 = hist2 / sum(hist2)
 

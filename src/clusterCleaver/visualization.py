@@ -7,13 +7,13 @@ from pathlib import Path
 import scipy.sparse
 
 # %%
-colors = ["#BB4E44", "#44B1BB", "#76BB44", "#8944BB"]
-fullPalette = list(colors + sns.color_palette("tab10"))
+colors = ['#BB4E44', '#44B1BB', '#76BB44', '#8944BB']
+fullPalette = list(colors + sns.color_palette('tab10'))
 sns.set_palette(sns.color_palette(fullPalette))
 
 
 # %%
-def plotExpression(adata, genes, colorCol="leiden"):
+def plotExpression(adata, genes, colorCol='leiden'):
     """
     Plots dual gene expression across two axes.
 
@@ -26,7 +26,7 @@ def plotExpression(adata, genes, colorCol="leiden"):
     Plots dual gene expression across two axes.
 
     """
-    assert len(genes) == 2, "Must have two genes"
+    assert len(genes) == 2, 'Must have two genes'
     X = adata[:, genes].X
     if scipy.sparse.issparse(X):
         X = X.toarray()
@@ -37,7 +37,7 @@ def plotExpression(adata, genes, colorCol="leiden"):
 
 
 def plotHists(
-    adata, gene, truncate0=False, colorCol="leiden", logScale=False, saveFig=""
+    adata, gene, truncate0=False, colorCol='leiden', logScale=False, saveFig=''
 ):
     """
     Plots a histogram and stripplot of gene expression data.
@@ -55,7 +55,7 @@ def plotHists(
     """
     assert (
         gene in adata.var.index
-    ), "Gene is not present in anndata object (adata.var.index)"
+    ), 'Gene is not present in anndata object (adata.var.index)'
     surfaceIdx = np.where(adata.var.index.isin([gene]))[0][0]
     expression = adata.X[:, surfaceIdx]
 
@@ -70,40 +70,40 @@ def plotHists(
     else:
         colorVec = adata.obs[colorCol]
     dfHist = pd.DataFrame(expression, colorVec).reset_index()
-    dfHist.columns = [colorCol, "expression"]
+    dfHist.columns = [colorCol, 'expression']
 
-    dfHist[colorCol] = dfHist[colorCol].astype("category")
+    dfHist[colorCol] = dfHist[colorCol].astype('category')
     # , log_scale=(False, True)
     plt.figure(figsize=(7, 6))
     plt.subplot(211)
     sns.histplot(
         data=dfHist,
-        x="expression",
+        x='expression',
         hue=colorCol,
-        element="poly",
+        element='poly',
         # stat='proportion',
         log_scale=(False, logScale),
-    ).set(xlabel="")
+    ).set(xlabel='')
 
     plt.subplot(212)
     sns.stripplot(
         data=dfHist,
-        x="expression",
+        x='expression',
         hue=colorCol,
         native_scale=True,
         legend=False,
         # jitter = 0.45
         jitter=True,
-    ).set(xlabel=f"{gene} Expression")
+    ).set(xlabel=f'{gene} Expression')
     if len(saveFig) > 0:
         saveDirectory = Path(saveFig).parents[0]
         if saveDirectory.exists():
             plt.savefig(saveFig, dpi=500)
         else:
-            print("Save path directory {saveDirectory} does not exist.")
+            print('Save path directory {saveDirectory} does not exist.')
 
 
-def plotModifiedHists(x0, x1, gene="gene"):
+def plotModifiedHists(x0, x1, gene='gene'):
     """
     Plot histograms of two vectors. Useful if custom modifications have been made
 
@@ -111,35 +111,35 @@ def plotModifiedHists(x0, x1, gene="gene"):
         - x0, x1: Lists of expression values
         - gene: Gene name used for plotting purposes
     """
-    colorCol = "leiden"
+    colorCol = 'leiden'
     logScale = False
-    label0 = np.repeat("0", len(x0))
-    label1 = np.repeat("1", len(x1))
+    label0 = np.repeat('0', len(x0))
+    label1 = np.repeat('1', len(x1))
     colorVec = np.concatenate([label0, label1])
     dfHist = pd.DataFrame([colorVec, np.concatenate([x0, x1])]).T
-    dfHist.columns = [colorCol, "expression"]
+    dfHist.columns = [colorCol, 'expression']
 
-    dfHist[colorCol] = dfHist[colorCol].astype("category")
+    dfHist[colorCol] = dfHist[colorCol].astype('category')
     # , log_scale=(False, True)
     plt.figure(figsize=(7, 6))
     plt.subplot(211)
     sns.histplot(
         data=dfHist,
-        x="expression",
+        x='expression',
         hue=colorCol,
-        element="poly",
+        element='poly',
         # stat='proportion',
         log_scale=(False, logScale),
-    ).set(xlabel="")
+    ).set(xlabel='')
 
     plt.subplot(212)
     sns.stripplot(
         data=dfHist,
-        x="expression",
+        x='expression',
         hue=colorCol,
         native_scale=True,
         legend=False,
         alpha=0.5,
         # jitter = 0.45
         jitter=True,
-    ).set(xlabel=f"{gene} Expression")
+    ).set(xlabel=f'{gene} Expression')
