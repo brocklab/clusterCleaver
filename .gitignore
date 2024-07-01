@@ -1,4 +1,6 @@
-/src/scDistRank/__pycache__/*
+/src/clusterCleaver/__pycache__/*
 .pypirc
 dist/*
 tests/data/*
+
+*.pyc

@@ -108,8 +108,8 @@ def plotModifiedHists(x0, x1, gene='gene'):
     Plot histograms of two vectors. Useful if custom modifications have been made
 
     Inputs:
-        - x0, x1: Lists of expression values
-        - gene: Gene name used for plotting purposes
+    - x0, x1: Lists of expression values
+    - gene: Gene name used for plotting purposes
     """
     colorCol = 'leiden'
     logScale = False
