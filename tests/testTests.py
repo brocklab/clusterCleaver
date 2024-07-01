@@ -1,11 +1,20 @@
 # %%
 import scanpy as sc
+import pandas as pd
 import unittest
 
-# %%
-adata = sc.datasets.pbmc3k_processed()
-adata.obs["bCells"] = 0
-isBCell = adata.obs["louvain"].astype("string") == "B cells"
-adata.obs.loc[isBCell, "bCells"] = 1
+from clusterCleaver import searchOptimal
 
-sc.pl.umap(adata, color="bCells")
+# %%
+adata = sc.read_h5ad("./data/adata231Process.h5ad")
+surfaceGenes = pd.read_csv("./data/surfaceGenes.csv", skiprows=4)
+surfaceGenes = surfaceGenes["Column2"].tolist()
+# %%
+topGenes = searchOptimal.searchExpressionDist1D(
+    adata, surfaceGenes, modifier="remove0", label="leiden"
+)
+
+
+# %%
+class testEMDSearch:
+    pass

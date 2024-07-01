@@ -5,7 +5,7 @@ import pandas as pd
 import itertools
 import warnings
 from scipy.sparse import issparse
-from scipy.stats import wasserstein_distance, gaussian_kde, iqr
+from scipy.stats import wasserstein_distance, gaussian_kde
 
 
 def searchExpressionDist1D(
@@ -197,10 +197,6 @@ def calculateBhattacharyya(X0, X1, ptsEval=10000):
     bScore = bhattacharyya(X0KDE, X1KDE)
 
     return bScore
-
-
-freedmanDiaconis = lambda x: 2 * iqr(x) / (len(x) ** (1 / 3))
-sturgesRule = lambda x: int(np.ceil(np.log2(len(x)) + 1))
 
 
 def bhattacharyyaHist(p, q):
