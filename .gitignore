@@ -2,5 +2,6 @@
 .pypirc
 dist/*
 tests/data/*
+data/*
 
 *.pyc

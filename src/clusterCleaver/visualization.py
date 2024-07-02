@@ -92,8 +92,8 @@ def plotHists(
         hue=colorCol,
         native_scale=True,
         legend=False,
-        # jitter = 0.45
-        jitter=True,
+        jitter = 0.45
+        # jitter=True,
     ).set(xlabel=f'{gene} Expression')
     if len(saveFig) > 0:
         saveDirectory = Path(saveFig).parents[0]
