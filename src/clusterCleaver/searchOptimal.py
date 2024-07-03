@@ -46,6 +46,7 @@ def searchExpressionDist1D(
         len(availableGenes) > 0
     ), 'No surface genes match genes in adata.var.index, check both inputs'
 
+    # TODO: this is deprecated in this function
     surfaceCombos = list(itertools.combinations(availableGenes, nGenes))
 
     if len(surfaceCombos) > maxCombos:
